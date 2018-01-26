@@ -1,6 +1,6 @@
 T = @(x, y) 1/7*sqrt(50^2 + x^2) + 1/4*sqrt(20^2 + (y-x)^2) + 1/2*sqrt(30^2 + (100-y)^2);
 
-%%%%%%%%%%% Initialize marching grid %%%%%%%%%%%%%%
+%%%%%%%%%%% Initialize marching grid %%%%%%%%%%%%%
 x_1 = 50;
 x_2 = 50;
 delta = 30;
@@ -10,7 +10,7 @@ T_cur = T(x_1, x_2);
 fprintf('\n Print initial T: %.2f', T_cur);
 fprintf('\n Print initial Delta: %.2f', delta);
 
-%%%%%%%%%%%%  ?x < 0.5m Change in T < 0.005 %%%%%%%%
+%%%%%%%%%%%%  x < 0.5m Change in T < 0.005 %%%%%%%
 while(delta >= 0.5 || T_delta >= 0.005)
     T_pre = Inf;
     T_delta = Inf;
