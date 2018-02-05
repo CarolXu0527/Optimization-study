@@ -1,0 +1,15 @@
+% Question 1
+
+x = linspace(-5, 5);
+y = linspace(-5, 5);
+[X,Y] = meshgrid(x, y);
+f=(2*(X.^2).*(Y^2) + 5*X.^2 + 5*Y.^2)./((X + 1).^2 + (Y - 1).^2 + 2);
+figure
+contour(X, Y, f, 'LevelStep', 0.2);
+grid on;
+axis square;
+hold on;
+
+%surf(X, Y, f);
+%shading interp;
+%colorbar;
