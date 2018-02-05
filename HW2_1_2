@@ -2,6 +2,7 @@
 
 clc
 
+syms x y
 f = (2*(x^2)*(y^2) + 5*x^2 + 5*y^2)/((x + 1)^2 + (y - 1)^2 + 2);
 g = gradient(f, [x, y]);
 ezcontour(f);
@@ -15,7 +16,7 @@ fn = {matlabFunction(g(1)), matlabFunction(g(2))};
 % Make anonymous function from numerical function
 fn1 = @(x)[fn{1}(x(1),x(2)), fn{2}(x(1),x(2))]; 
 
-x0=[0,0];
+x0=[0,1];
 x_min=fsolve(fn1,x0);
 plot(x_min(1),x_min(2),'b+','MarkerSize',12)
 text(-0.5,2,['x* = ' num2str(x_min(1))])
