@@ -1,0 +1,32 @@
+
+function HW2_2_2
+clc
+
+syms x y
+f = obj_1(x, y);
+g = gradient(f, [x, y]);
+fcontour(f);
+grid on;
+axis([0 200 0 200]);
+axis square
+hold on
+
+fn = {matlabFunction(g(1)), matlabFunction(g(2))};
+
+% Make anonymous function from numerical function
+fn1 = @(x)[fn{1}(x(1),x(2)), fn{2}(x(1),x(2))]; 
+
+x0=[0,1];
+x_min=fsolve(fn1,x0);
+plot(x_min(1),x_min(2),'b+','MarkerSize',12)
+text(x_min(1), x_min(2) + 20, ['x* = ' num2str(x_min(1))])
+text(x_min(1), x_min(2) + 10, ['y* = ' num2str(x_min(2))]) 
+
+return 
+
+function f=obj_1(x, y)
+
+% Define the objective function
+f = sqrt(x.^2 + (y - 100).^2) + 50 + sqrt(x.^2 + (y - 50).^2) + 2*sqrt((x - 50).^2 + y.^2) + 2*sqrt((x - 150).^2 + y.^2);
+
+return
