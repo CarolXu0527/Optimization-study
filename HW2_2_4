@@ -1,0 +1,26 @@
+function HW2_2_4
+
+clc
+
+x0 = [0,1]; % Define starting Point
+%%%% fminunc with gradient %%%%
+options = optimoptions('fminunc','GradObj','on'); % MATLAB R2015a
+fn = @obj_grad; % fn contains both objective and gradient
+x_min = fminunc(fn,x0,options); % Find minimum point using fminsearch
+
+%%%% fminunc without gradient %%%%
+%f = @(x) sqrt(x(1)^2 + (x(2) - 100)^2) + 50 + sqrt(x(1)^2 + (x(2) - 50)^2) + 2*sqrt((x(1) - 50)^2 + x(2).^2) + 2*sqrt((x(1) - 150)^2 + x(2)^2);
+%x_min=fminunc(f,x0);
+
+disp(['x* = ' num2str(x_min(1))])
+disp(['y* = ' num2str(x_min(2))])
+return
+
+function [f,g]=obj_grad(x)
+
+f = sqrt(x(1)^2 + (x(2) - 100)^2) + 50 + sqrt(x(1)^2 + (x(2) - 50)^2) + 2*sqrt((x(1) - 50)^2 + x(2).^2) + 2*sqrt((x(1) - 150)^2 + x(2)^2);
+
+g(1) = (2*x(1) - 100)/((x(1) - 50)^2 + x(2)^2)^(1/2) + (2*x(1) - 300)/((x(1) - 150)^2 + x(2)^2)^(1/2) + x(1)/((x(2) - 50)^2 + x(1)^2)^(1/2) + x(1)/((x(2) - 100)^2 + x(1)^2)^(1/2);
+g(2) = (2*x(2) - 100)/(2*((x(2) - 50)^2 + x(1)^2)^(1/2)) + (2*x(2) - 200)/(2*((x(2) - 100)^2 + x(1)^2)^(1/2)) + (2*x(2))/((x(1) - 50)^2 + x(2)^2)^(1/2) + (2*x(2))/((x(1) - 150)^2 + x(2)^2)^(1/2);
+
+return
