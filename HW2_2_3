@@ -1,0 +1,56 @@
+function HW2_2_3
+
+clc
+d = 200;
+N = 20; 
+x = linspace(0, d);
+y = linspace(0, d);
+[X,Y] = meshgrid(x, y);
+F = obj_1(X, Y);
+contour(X, Y, F, 'LevelStep', 10);
+grid on;
+axis square;
+hold on;
+shading interp;
+colorbar;
+
+x = random('uniform',0,d,N,1);
+y = random('uniform',0,d,N,1);
+
+f = obj_1(x, y);
+plot(x,y,'bo')
+[F,I] = sort(f);
+
+% get the minimun value of current result set
+plot(x(I(1)), y(I(1)),'bo', 'MarkerSize',12)
+disp(['x_star of first iter: ' num2str(x(I(1))) ])
+disp(['y_star of first iter: ' num2str(y(I(1))) ])
+disp(['F_star of first iter: ' num2str(F(1)) ])
+text(x(I(1)), y(I(1)),'\leftarrow First Estimate of Minimum','Color','red')
+
+% Starting at the lowest value of f, do another iteration
+d = 20;
+x0 = x(I(1)); 
+y0 = y(I(1));
+clear x y ;
+x = random('uniform',x0-d,x0+d,N,1);
+y = random('uniform',y0-d,y0+d,N,1);
+plot(x,y,'rs');
+f = obj_1(x, y);
+
+clear F I
+[F,I] = sort(f);
+plot(x(I(1)),y(I(1)),'rs','MarkerSize',12);
+disp(['x_star of second iter: ' num2str(x(I(1))) ])
+disp(['y_star of second iter: ' num2str(y(I(1))) ])
+disp(['F_star of second iter: ' num2str(F(1)) ])
+text(x(I(1)), y(I(1)),'\leftarrow Second Estimate of Minimum','Color','red')
+hold off
+return
+
+function f=obj_1(x, y)
+
+% Define the objective function
+f = sqrt(x.^2 + (y - 100).^2) + 50 + sqrt(x.^2 + (y - 50).^2) + 2*sqrt((x - 50).^2 + y.^2) + 2*sqrt((x - 150).^2 + y.^2);
+
+return
