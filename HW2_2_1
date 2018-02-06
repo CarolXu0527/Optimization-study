@@ -1,0 +1,35 @@
+% Qestion 1
+
+function HW2_2_1
+clc
+
+%f = @(x, y) sqrt(x^2 + (y - 100)^2) + 50 + sqrt(x^2 + (y - 50)^2) + 2*sqrt((x - 50)^2 + y^2) + 2*sqrt((x - 150)^2 + y^2);
+
+x = linspace(0, 200);
+y = linspace(0, 200);
+[X,Y] = meshgrid(x, y);
+f = obj_1(X, Y);
+figure
+contour(X, Y, f, 'LevelStep', 0.1);
+grid on;
+axis square;
+hold on;
+shading interp;
+colorbar;
+return
+
+function f=obj_1(x, y)
+
+% Define the objective function
+f = sqrt(x.^2 + (y - 100).^2) + 50 + sqrt(x.^2 + (y - 50).^2) + 2*sqrt((x - 50).^2 + y.^2) + 2*sqrt((x - 150).^2 + y.^2);
+
+return
+
+%%%% deprecated part, planned for multiobjective, like minimizing the
+%%%% distance with package
+%function f=obj_2(x, y)
+
+% Define the objective function
+%f = sqrt((x - 50).^2 + y.^2) + sqrt((x - 150).^2 + y.^2);
+
+%return
