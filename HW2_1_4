@@ -1,24 +1,26 @@
-function hw2_4
+function HW2_1_4
 
 clc
 
-x0=[0,1]; % Define starting Point
-% Tell fminunc that the gradient is available
-options=optimoptions('fminunc','GradObj','on'); % MATLAB R2015a
-fn=@obj_grad; % fn contains both objective and gradient
-x_min=fminunc(fn,x0,options); % Find minimum point using fminsearch
+x0 = [0,1]; % Define starting Point
+%%%% fminunc with gradient %%%%
+options = optimoptions('fminunc','GradObj','on'); % MATLAB R2015a
+fn = @obj_grad; % fn contains both objective and gradient
+x_min = fminunc(fn,x0,options); % Find minimum point using fminsearch
+
+%%%% fminunc without gradient %%%%
+%f = @(x) (2*(x(1)^2)*(x(2)^2) + 5*x(1)^2 + 5*x(2)^2)/((x(1) + 1)^2 + (x(2) - 1)^2 + 2);
+%x_min=fminunc(f,x0);
+
 disp(['x* = ' num2str(x_min(1))])
 disp(['y* = ' num2str(x_min(2))])
 return
 
 function [f,g]=obj_grad(x)
 
-% Define the objective function
-f=(2*(x(1)^2)*(x(2)^2) + 5*x(1)^2 + 5*x(2)^2)/((x(1) + 1)^2 + (x(2) - 1)^2 + 2);
+f = (2*(x(1)^2)*(x(2)^2) + 5*x(1)^2 + 5*x(2)^2)/((x(1) + 1)^2 + (x(2) - 1)^2 + 2);
 
-%Define the gradient of the objective function
-g(1) = (4*x(1)*x(2)^2 + 10*x(1))/((x(1) + 1)^2 + (x(2) - 1)^2 + 2) - ((2*x(1) + 2)*(2*x(1)^2*x(2)^2 + 5*x(1)^2 + 5*x(2)^2))/((x(1) + 1)^2 + (x(2) - 1)^2 + 2)^2;
-
-g(2) = (4*x(2)*(x(1)^2 + 10*x(2))/(((x(1) + 1)^2 + (x(2) - 1)^2 + 2) - ((2*x(2) - 2)*(2*(x(1)^2*x(2)^2 + 5*(x(1)^2 + 5*x(2)^2))/((x(1) + 1)^2 + (x(2) - 1)^2 + 2)^2;
+g(1) = (4*x(1)*x(2)^2 + 10*x(1))/((x(1) + 1)^2 + (x(1) - 1)^2 + 2) - ((2*x(1) + 2)*(2*x(1)^2*x(2)^2 + 5*x(1)^2 + 5*x(2)^2))/((x(1) + 1)^2 + (x(2) - 1)^2 + 2)^2;
+g(2) = (4*x(2)*x(1)^2 + 10*x(2))/((x(1) + 1)^2 + (x(1) - 1)^2 + 2) - ((2*x(2) - 2)*(2*x(1)^2*x(2)^2 + 5*x(1)^2 + 5*x(2)^2))/((x(1) + 1)^2 + (x(2) - 1)^2 + 2)^2;
 
 return
