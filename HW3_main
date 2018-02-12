@@ -1,0 +1,132 @@
+
+function HW3_main
+clc
+
+% HW3_1_fzero
+% HW3_2_fminunc
+HW3_3_approximation
+
+return
+
+% Set the derivative equal to zero and solve for x* using ‘fzero’
+function HW3_1_fzero
+
+f = @(x) -x.*exp(-x./5);
+df = @(x) -exp(-x./5) + x.*exp(-x./5)/5;
+
+ezplot(f, [-15 15 -15 15]);
+hold on
+grid on
+axis square
+
+x_0 = 0;
+x_root = fzero(df, x_0);
+plot(x_root, f(x_root), 'bo');
+
+text(x_root + 0.5, f(x_root), ['x = ' num2str(x_root) ' y = ' num2str(f(x_root))])
+%fprintf(x_root);
+
+disp('------- fzero approach ----------');
+disp(['x = ' num2str(x_root)])
+disp(['y = ' num2str(f(x_root))])
+
+return
+
+% Find the minimum using Matlab function ‘fminunc’
+function HW3_2_fminunc
+
+x_0 = 0;
+options = optimoptions('fminunc','GradObj','on','Algorithm','quasi-newton');
+
+fn = @obj_grad;
+x_min_minunc = fminunc(fn, x_0, options);
+
+disp('------- fminunc approach ---------')
+disp(['x = ' num2str(x_min_minunc)])
+disp(['y = ' num2str(obj_grad(x_min_minunc))])
+
+return
+
+function [f, df] = obj_grad(x)
+    f = -x*exp(-x/5);
+    df = -exp(-x/5) + x*exp(-x/5)/5;
+return
+
+% Find minimum using sequential quadratic approximation
+function HW3_3_approximation
+
+x_0 = 0;
+x_Delta = 10;
+x_Delta_star_min = 0.05;
+f_Delta_star_min = 0.05;
+x_Delta_star = realmax;
+f_Delta_star = realmax;
+
+f = @(x) -x*exp(-x/5);
+
+x_1 = x_0 + x_Delta;
+x_2 = x_0 + 2*x_Delta;
+
+f_0 = f(x_0);
+f_1 = f(x_1);
+f_2 = f(x_2);
+
+a = [x_0^2, x_0, 1; x_1^2, x_1, 1; x_2^2, x_2, 1];
+b = [f_0; f_1; f_2];
+
+c = a\b;
+
+p = @(x) c(1)*x^2 + c(2)*x + c(3);
+
+ezplot(p, [-30 30 -30 30]);
+hold on
+grid on
+axis square
+
+%disp(a);
+disp(b);
+disp(c(1));
+disp(c(2));
+%disp(c(3));
+
+if c(1) <= 0
+    return
+end
+
+while c(1) > 0 && (x_Delta_star >= x_Delta_star_min || f_Delta_star >= f_Delta_star_min)
+    
+    x_star = -c(2)/(2*c(1));
+    x_0 = x_star - x_Delta;
+    x_1 = x_star;
+    x_2 = x_star + x_Delta;
+    
+    f_0 = f(x_0);
+    f_1 = f(x_1);
+    f_2 = f(x_2);
+    
+    a = [x_0^2, x_0, 1; x_1^2, x_1, 1; x_2^2, x_2, 1];
+    b = [f_0; f_1; f_2];
+    
+    c = a\b;
+    
+    p = @(x) c(1)*x^2 + c(2)*x + c(3);
+    x_Delta_star = abs(x_star - -c(2)/(2*c(1)));
+    f_Delta_star = abs(f(x_star)- f(-c(2)/(2*c(1))));
+    %x_star = -c(2)/2*c(1);
+    
+    disp(['c(1): ' num2str(c(1))]);
+    disp(['x_Delta: ' num2str(x_Delta)]);
+    disp(['x_Delta_star: ' num2str(x_Delta_star)]);
+    disp(['f_Delta_star: ' num2str(f_Delta_star)]);
+    disp(['x_star: ' num2str(x_star)]);
+    disp(c(1) > 0);
+    disp(x_Delta_star >= x_Delta_star_min);
+    disp(f(x_star) >= f_Delta_star_min);
+    
+    if x_Delta_star >= x_Delta
+        x_Delta = x_Delta/2;
+        disp('hit if');
+    end
+end
+
+return
