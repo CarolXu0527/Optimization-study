@@ -1,4 +1,4 @@
-function HW5_main
+function HW5
     clc
     x = [0 1 2 3];
     y = [0 1 1 1];
@@ -65,7 +65,7 @@ function HW5_LSCF_exponential_lsqcurvefit(feat, pred)
     plot(x, y, 'ro');
     title('fitting using lsqcurvefit');
     
-    f = @(c, xdata) c(1).*(1 - exp(-c(2).*xdata));
+    f = @(c, xdata) c(1).*(exp(c(2).*xdata));
     c_0 = [1 1];
     
     c = lsqcurvefit(f,c_0,x,y);
@@ -86,7 +86,7 @@ function HW5_LSCF_exponential_fsolve(feat, pred)
     Fsumsquares = 0;
     
     for i = 1:length(x)
-        Fsumsquares = Fsumsquares + (y(i) - (a.*(1 - exp(-b.*x(i)))))^2;
+        Fsumsquares = Fsumsquares + (y(i) - (a.*(exp(b.*x(i)))))^2;
     end
     
     g = gradient(Fsumsquares, [a, b]);
@@ -94,12 +94,12 @@ function HW5_LSCF_exponential_fsolve(feat, pred)
     
     fn1 = @(a)[fn{1}(a(1), a(2)), fn{2}(a(1), a(2))]; 
     
-    opts = optimoptions('fsolve','MaxFunctionEvaluations',40000, 'MaxIterations', 40000);
+    opts = optimoptions('fsolve','MaxFunctionEvaluations',400, 'MaxIterations', 400);
     a_0 = [1 1];
     
     a_min = fsolve(fn1, a_0, opts);
     
     disp(a_min);
-    plot(x, y, '.-', x, a_min(1)*(1 - exp(-a_min(2).*x)), 'r:x');
+    plot(x, y, '.-', x, a_min(1)*(exp(a_min(2).*x)), 'r:x');
     
 return
