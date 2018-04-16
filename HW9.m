@@ -27,8 +27,8 @@ s_D = matlabFunction(P_g(1));
 s_H = matlabFunction(P_g(2));
 
 % initial value
-D_cur = 100;
-H_cur = 100;
+D_cur = 10;
+H_cur = 10;
 D_pre = Inf;
 H_pre = Inf;
 
