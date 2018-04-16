@@ -5,17 +5,19 @@
 % Exit criteria is satisfied when change in f* < 1% or change in both design variables is < 1%.
 clc
 syms D H
-A = pi*D*H + (pi/2)*D^2;
+A = pi*D*H + (pi/2)*(D^2);
 V = (D^2)*H*pi/4;
-g = -(D^2)*H*pi/4 + 500;
+g = (D^2)*H*(-pi/4) + 500;
+g_2 = -D;
 
 % P = A + R*Hev(g)*g^2;
-P = pi*D*H + (pi/2)*D^2 + heaviside(-(D^2)*H*pi/4 + 500)*(-(D^2)*H*pi/4 + 500)^2;
+% R = 1;
+P = A + heaviside(g)*(g^2) + heaviside(g_2)*(g_2^2);
 P_g = gradient(P, [D, H]);
 
 fcontour(P);
 grid on;
-axis([-100 100 -100 100]);
+axis([-10 100 -10 100]);
 hold on
 
 P_fun = matlabFunction(P);
@@ -25,27 +27,21 @@ s_D = matlabFunction(P_g(1));
 s_H = matlabFunction(P_g(2));
 
 % initial value
-D_cur = 500;
-H_cur = 500;
+D_cur = 100;
+H_cur = 100;
 D_pre = Inf;
 H_pre = Inf;
 
 P_cur = P_fun(D_cur, H_cur);
 P_pre = Inf;
 
-fprintf('wura');
-
-disp((abs(D_cur-D_pre)/D_pre < 0.01));
-disp((abs(D_cur-D_pre)/D_pre < 0.01));
-disp((abs(D_cur-D_pre)/D_pre < 0.01));
-
-while ((abs(D_cur-D_pre)/D_pre > 0.01) && (abs(H_cur-H_pre)/H_pre > 0.01)) || (abs(P_cur-P_pre)/P_pre > 0.01)
+while ((abs((D_cur-D_pre)/D_cur) > 0.01) || (abs((H_cur-H_pre)/H_cur) > 0.01)) && (abs((P_cur-P_pre)/P_cur) > 0.01)
     syms d
 
     D_d = D_cur + d*(-1)*s_D(D_cur, H_cur);
     H_d = H_cur + d*(-1)*s_H(D_cur, H_cur);
     
-    P_d = pi*D_d*H_d + (pi/2)*D_d^2 + heaviside(-(D_d^2)*H_d*pi/4 + 500)*(-(D_d^2)*H_d*pi/4 + 500)^2;
+    P_d = pi*D_d*H_d + (pi/2)*(D_d^2) + heaviside((D_d^2)*H_d*(-pi/4) + 500)*(((D_d^2)*H_d*(-pi/4) + 500)^2) + heaviside(-D_d)*((-D_d)^2);
     Pd_fun = matlabFunction(P_d);
 
     d_star = fminunc(Pd_fun, 0);
@@ -71,13 +67,9 @@ while ((abs(D_cur-D_pre)/D_pre > 0.01) && (abs(H_cur-H_pre)/H_pre > 0.01)) || (a
     D_cur = D_star;
     H_cur = H_star;
     
-    fprintf('\n %.2f, %.2f, %.2f', D_cur, H_cur, P_star);
+    P_pre = P_cur;
+    P_cur = P_star;
+    
 end
     
     
-
-
-
-
-
-
