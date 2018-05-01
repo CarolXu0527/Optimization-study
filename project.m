@@ -60,7 +60,7 @@ Penal_2 = R_4 + 1600;
 
 % step 6: use Conjugate Gradient Method to minimize F
 g = gradient(F, [q_1, q_2]);
-fcontour(F);
+fcontour(F, 'LevelStep', 10);
 grid on;
 axis([-100 200 -100 200]);
 axis square
