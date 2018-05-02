@@ -46,21 +46,22 @@ S_2 = -(n_e_2^3 + (n_e_2 + 2)*q_2^2 + (3*n_e_2 + 2)*(n_e_2 - 1)^2*p_2^2 + 4*(n_e
 temp = c_1 + c_2 + S_1 + S_2;
 F = solve(temp, f);
 
-%%% under construction %%%%%%%%%
-
 % step 5: add penalty
 % R1 < 400mm, R4 < -1600mm
-R_1 = 2*((n_e_1 - 1) - (n_f_1 - n_c_1)*(n_e_2 - 1)/(n_f_2 - n_c_2))/(q_1 + 1);
+disp('Start to do penalty');
+R_1 = 2*F*((n_e_1 - 1) - (n_f_1 - n_c_1)*(n_e_2 - 1)/(n_f_2 - n_c_2))/(q_1 + 1);
 R_3 = -((n_f_2 - n_c_2)*(q_1 + 1)*R_1)/((n_f_1 - n_c_1)*(q_2 + 1));
 R_4 = (q_2 + 1)*R_3/(q_2 - 1);
 
 Penal_1 = R_1 - 400;
 Penal_2 = R_4 + 1600;
-%%% under construction %%%%%%%%%
+R = 1;
+
+F = F + R*heaviside(Penal_1)*(Penal_1^2) + R*heaviside(Penal_2)*(Penal_2^2);
 
 % step 6: use Conjugate Gradient Method to minimize F
 g = gradient(F, [q_1, q_2]);
-fcontour(F, 'LevelStep', 10);
+fcontour(F, 'LevelStep', 5);
 grid on;
 axis([-100 200 -100 200]);
 axis square
